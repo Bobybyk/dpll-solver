@@ -11,6 +11,16 @@ Ces types et les commentaires dans dpll.ml sont indicatifs. D'autres choix peuve
 
 **Vous devez documenter votre code en remplissant le fichier RENDU**. Dans ce fichier, vous trouverez des questions précises sur votre implémentation. Vos réponses à ces questions constitueront une partie importante de votre note. Un mini-projet sans fichier RENDU rempli ne recevra pas de note.
 
+# Installer OCAML
+**Source**: https://ocaml.org/learn/tutorials/up_and_running.html
+
+*  Installer `opam` à l'aide du gestionnaire de paquets
+*  `opam init`
+*  ``` eval `opam env` ```
+*  `opam install dune`
+
+C'est prêt :D
+
 # Tester son mini-projet
 
 Outre les exemples de test inclus dans dpll.ml (exemple_3_12, exemple_7_2, exemple_7_4, exemple_7_8, systeme, coloriage), vous pouvez utiliser le Makefile en appelant 
