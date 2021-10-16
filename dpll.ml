@@ -39,7 +39,7 @@ let coloriage = [[1;2;3];[4;5;6];[7;8;9];[10;11;12];[13;14;15];[16;17;18];[19;20
    applique la simplification de l'ensemble des clauses en mettant
    le littéral i à vrai *)
 let simplifie i clauses =
-  (* à compléter *)
+  (*TODO à compléter *)
   []
 
 (* solveur_split : int list list -> int list -> int list option
@@ -69,7 +69,7 @@ let rec solveur_split clauses interpretation =
       le littéral de cette clause unitaire ;
     - sinon, lève une exception `Not_found' *)
 let unitaire clauses =
-  (* à compléter *)
+  (*TODO à compléter *)
   0
     
 (* pur : int list list -> int
@@ -77,12 +77,12 @@ let unitaire clauses =
       ce littéral ;
     - sinon, lève une exception `Failure "pas de littéral pur"' *)
 let pur clauses =
-  (* à compléter *)
+  (*TODO à compléter *)
   0
 
 (* solveur_dpll_rec : int list list -> int list -> int list option *)
 let rec solveur_dpll_rec clauses interpretation =
-  (* à compléter *)
+  (*TODO à compléter *)
   None
 
 (* tests *)
