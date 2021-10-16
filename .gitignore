@@ -1,7 +1,4 @@
-dimacs.cmi
-dimacs.cmx
-dimacs.o
+*.cmi
+*.cmx
+*.o
 dpll
-dpll.cmi
-dpll.cmx
-dpll.o
