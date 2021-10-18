@@ -1,4 +1,5 @@
 open List
+open Printf
 
 (* fonctions utilitaires *********************************************)
 (* filter_map : ('a -> 'b option) -> 'a list -> 'b list
@@ -39,11 +40,11 @@ let coloriage = [[1;2;3];[4;5;6];[7;8;9];[10;11;12];[13;14;15];[16;17;18];[19;20
    applique la simplification de l'ensemble des clauses en mettant
    le littéral i à vrai *)
 let simplifie i clauses =
-        match clauses with
-        | [] -> [[]]
-        | e::l -> List.filter (fun x -> List.mem i e) clauses;;
-  (*TODO à compléter *)
-
+        List.filter (fun x -> not (List.mem i x)) clauses;;
+        (*
+         * for each list inside the list of lists 'clauses', check if it contains i
+         * return a list of lists containing only the clauses that do not contain the litteral i
+         *)
 
 (* solveur_split : int list list -> int list -> int list option
    exemple d'utilisation de `simplifie' *)
@@ -95,3 +96,14 @@ let rec solveur_dpll_rec clauses interpretation =
 let () =
   let clauses = Dimacs.parse Sys.argv.(1) in
   print_modele (solveur_dpll_rec clauses [])
+
+(* our tests *)
+
+let simplified = (simplifie 3 exemple_3_12);;
+
+let printlist l = List.iter (fun x -> printf "%d " x) l;;
+let print_list_of_lists l = List.iter (fun ll -> printlist ll) l;;
+
+print_list_of_lists exemple_3_12;;
+printf "\n";;
+print_list_of_lists simplified;;
