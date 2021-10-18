@@ -39,8 +39,11 @@ let coloriage = [[1;2;3];[4;5;6];[7;8;9];[10;11;12];[13;14;15];[16;17;18];[19;20
    applique la simplification de l'ensemble des clauses en mettant
    le littéral i à vrai *)
 let simplifie i clauses =
+        match clauses with
+        | [] -> [[]]
+        | e::l -> List.filter (fun x -> List.mem i e) clauses;;
   (*TODO à compléter *)
-  []
+
 
 (* solveur_split : int list list -> int list -> int list option
    exemple d'utilisation de `simplifie' *)
