@@ -40,10 +40,11 @@ let coloriage = [[1;2;3];[4;5;6];[7;8;9];[10;11;12];[13;14;15];[16;17;18];[19;20
    applique la simplification de l'ensemble des clauses en mettant
    le littéral i à vrai *)
 let simplifie i clauses =
-        List.filter (fun x -> not (List.mem i x)) clauses;;
+        List.map (fun x -> List.filter (fun y -> -i <> y) x) (List.filter (fun z -> not (List.mem i z)) clauses);;
         (*
          * for each list inside the list of lists 'clauses', check if it contains i
          * return a list of lists containing only the clauses that do not contain the litteral i
+         * then remove the negation of i within the clauses
          *)
 
 (* solveur_split : int list list -> int list -> int list option
