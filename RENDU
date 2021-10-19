@@ -8,9 +8,9 @@ Date limite: 29 octobre 2021, 23h59
 
 Identité
 --------
-Nombre de binôme: **à remplir**
-Nom, prénom 1: **à remplir**
-Nom, prénom 2: **à remplir**
+Nombre de binôme: 3
+Nom, prénom 1: JACOTOT Hugo
+Nom, prénom 2: LE FRANC Matthieu
 
 
 Questions sur votre code
@@ -43,7 +43,9 @@ Questions sur votre code
    comment ces fonctions auxiliaires sont utilisées dans votre
    implémentation de la fonction `unitaire`.
 
-**à remplir**
+   La fonction List.find permet de renvoyer le premier élément d'une liste satisfiant la condition donnée.
+   On applique donc cette fonction à une liste de listes représentant une CNF, avec comme condition que la liste recherchée doit contenir un seul élément (à l'aide de la fonction List.length).
+   On récupère ensuite l'unique littéral contenu dans cette liste à l'aide de la fonction List.hd
 
 ---
 
