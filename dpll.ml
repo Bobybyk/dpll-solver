@@ -44,7 +44,7 @@ let simplifie i clauses =
         (*
          * for each list inside the list of lists 'clauses', check if it contains i
          * return a list of lists containing only the clauses that do not contain the litteral i
-         * then remove the negation of i within the clauses
+         * then remove the negation of i within the remaining clauses
          *)
 
 (* solveur_split : int list list -> int list -> int list option
@@ -74,8 +74,11 @@ let rec solveur_split clauses interpretation =
       le littéral de cette clause unitaire ;
     - sinon, lève une exception `Not_found' *)
 let unitaire clauses =
-  (*TODO à compléter *)
-  0
+        List.hd (List.find (fun l -> length l = 1) clauses);;
+        (*
+         * Find the first clause that contains only one element (if no clauses matches that statement, an exception 'not found' is thrown
+         * Return the first (and only) element of that clause
+         *)
     
 (* pur : int list list -> int
     - si `clauses' contient au moins un littéral pur, retourne
@@ -100,11 +103,12 @@ let () =
 
 (* our tests *)
 
-let simplified = (simplifie 3 exemple_3_12);;
-
 let printlist l = List.iter (fun x -> printf "%d " x) l;;
 let print_list_of_lists l = List.iter (fun ll -> printlist ll) l;;
 
 print_list_of_lists exemple_3_12;;
 printf "\n";;
-print_list_of_lists simplified;;
+print_list_of_lists (simplifie 3 exemple_3_12);;
+
+printf "\n";;
+printf "%d\n" (unitaire exemple_7_4);;
