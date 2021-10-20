@@ -89,10 +89,11 @@ let pur clauses =
   List.map(fun l -> match l with
   | [] -> clauses_wo_dl
   | e::clauses' -> if (List.mem e clauses_wo_dl) = false then (copy_wo_dl clauses' (e::clauses_wo_dl))
-    else (copy_wo_dl clauses' clauses_wo_dl)) clauses in list_of_clauses_wo_dl clauses (copy_wo_dl (clauses []));;
-  (*TODO à compléter *)
+    else (copy_wo_dl clauses' clauses_wo_dl)) clauses in list_of_clauses_wo_dl clauses (copy_wo_dl clauses []);;
+  (* DOING à compléter *)
 
 let rec list_of_clauses_wo_dl clauses clauses_wo_dl = match clauses_wo_dl with
+| [] -> failwith("pas de littéral pur");
 | e::clauses_wo_dl' -> if is_pur (e clauses) then e 
   else list_of_clauses_wo_dl clauses clauses_wo_dl';;
 
