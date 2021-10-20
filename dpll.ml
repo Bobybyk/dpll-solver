@@ -86,11 +86,24 @@ let unitaire clauses =
     - sinon, lève une exception `Failure "pas de littéral pur"' *)
 let pur clauses =
   let rec copy_wo_dl clauses clauses_wo_dl =
-  List.map(fun l -> match clauses with
+  List.map(fun l -> match l with
   | [] -> clauses_wo_dl
-  | e::clauses' -> if (List.mem e clauses_wo_dl = false then copy_wo_dl clauses' e::clauses_wo_dl
+  | e::clauses' -> if (List.mem e clauses_wo_dl) = false then (copy_wo_dl clauses' (e::clauses_wo_dl))
+    else (copy_wo_dl clauses' clauses_wo_dl)) clauses in list_of_clauses_wo_dl clauses (copy_wo_dl (clauses []));;
   (*TODO à compléter *)
-  0
+
+let rec list_of_clauses_wo_dl clauses clauses_wo_dl = match clauses_wo_dl with
+| e::clauses_wo_dl' -> if is_pur (e clauses) then e 
+  else list_of_clauses_wo_dl clauses clauses_wo_dl';;
+
+let rec is_pur x l =
+  match l with
+  | [] -> true
+  | e::l' -> if e = -x then false 
+    else is_pur x l';;  
+
+(* end of pur sequence *)
+
 
 (* solveur_dpll_rec : int list list -> int list -> int list option *)
 let rec solveur_dpll_rec clauses interpretation =
