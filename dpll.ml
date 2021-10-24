@@ -80,13 +80,47 @@ let unitaire clauses =
          * Return the first (and only) element of that clause
          *)
     
+  (* DOING à compléter *)
 (* pur : int list list -> int
     - si `clauses' contient au moins un littéral pur, retourne
       ce littéral ;
     - sinon, lève une exception `Failure "pas de littéral pur"' *)
+
+(* on regarde tous les littéraux de clauses_wo_dl et on les compare à ceux de clauses 
+pour s'assurer que l'inverse de chacun n'est pas présent. Si on ne trouve pas un littéral
+inverse de l'autre, on le retourne car il est pur, sinon on rappelle la fonction.
+Si on atteint la fin de la liste, retourne un failwith *)
+let rec is_pur x clauses = 
+  match clauses with
+  | [] -> true
+  | down_list::clauses' -> if(List.mem (-x) down_list) then false 
+    else is_pur x clauses';; 
+ 
+let rec list_of_clauses_wo_dl clauses clauses_wo_dl = 
+  match clauses_wo_dl with
+    | [] -> failwith("pas de littéral pur");
+    | e::clauses_wo_dl' -> if (is_pur e clauses) = true then e 
+      else list_of_clauses_wo_dl clauses clauses_wo_dl';;
+
+(* on cherche à copier tous les littéraux de "clauses" dans une liste "clauses_wo_dl"
+ en s'assurant avant chaque ajout que le littéral (+ ou -) considéré n'est pas déjà présent dans
+ "clauses_wo_dl" *)
+let rec copy_wo_dl_bis clause clauses_wo_dl =
+  match clause with
+    | [] -> clauses_wo_dl
+    | e::clause' -> if (List.mem e clauses_wo_dl) || (List.mem e clauses_wo_dl) then copy_wo_dl_bis clause' clauses_wo_dl else copy_wo_dl_bis clause' (e::clauses_wo_dl);;
+
+(* on parcourt les clauses et on appelle copy_wo_dl_bis avec chaque clause de clauses 
+  et enfin, lorsque clausesIndex a été parcouru, on appekke list_of_clauses avec la
+  copie des littéraux sans doublons et la liste des clauses *)
 let pur clauses =
-  (*TODO à compléter *)
-  0
+  let rec copy_wo_dl clauses clausesIndex clauses_wo_dl =
+  match clausesIndex with
+    | [] -> list_of_clauses_wo_dl clauses clauses_wo_dl
+    | down_list::up_list' -> copy_wo_dl clauses up_list' (copy_wo_dl_bis down_list clauses_wo_dl) in copy_wo_dl clauses clauses [];;
+
+(* end of pur sequence *)
+
 
 (* solveur_dpll_rec : int list list -> int list -> int list option *)
 let rec solveur_dpll_rec clauses interpretation =
@@ -112,3 +146,5 @@ print_list_of_lists (simplifie 3 exemple_3_12);;
 
 printf "\n";;
 printf "%d\n" (unitaire exemple_7_4);;
+
+printf "%d\n" (pur exemple_7_8);;
