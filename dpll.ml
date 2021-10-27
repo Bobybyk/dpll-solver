@@ -98,7 +98,7 @@ let rec is_pur x clauses =
  
 let rec list_of_clauses_wo_dl clauses clauses_wo_dl = 
   match clauses_wo_dl with
-    | [] -> failwith("pas de littéral pur");
+    | [] -> raise (Not_found)
     | e::clauses_wo_dl' -> if (is_pur e clauses) = true then e 
       else list_of_clauses_wo_dl clauses clauses_wo_dl';;
 
