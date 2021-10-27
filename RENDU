@@ -19,7 +19,11 @@ Questions sur votre code
    et que ensuite `./dpll sudoku-4x4.cnf` donne la réponse attendue (voir
    fichier README) ?
 
-**à remplir**
+   **Réponse :**
+    - `make dpll` s'exécute bien sans erreurs ou warnings.
+    - `./dpll sudoku-4x4.cnf` donne la réponse attendue : à savoir la réponse donnée dans le fichier README ainsi que le même résultat obtenu par la fonction `solveur_split`
+
+**rempli**
 
 ---
 
@@ -29,6 +33,10 @@ Questions sur votre code
      l'avez utilisée.
    - Si non, expliquez en quelques phrases en français comment
      fonctionne votre implémentation de `simplifie`.
+
+   **Réponse :**
+      - Nous n'avons pas fait appel à la fonction `filter_map` mais utilisés, pour la fonction `simplifie`, nos propres appels aux fonctions **List** d'**OCAML**.
+      - EXPLICATION DU FONCTIONNEMENT DE SIMPLIFIE  
 
 **à remplir**
 
@@ -53,6 +61,10 @@ Questions sur votre code
    auxiliaires que vous avez utilisées et/ou écrites ?  Expliquez en
    quelques phrases en français comment ces fonctions auxiliaires sont
    utilisées dans votre implémentation de la fonction `pur`.
+
+   **Réponse :** le principe de notre implémentation de la fonction `pur` et de faire la copie dans une liste **auxiliaire** de tous les littéraux des sous listes de la liste de listes **clauses** en prenant garde à ne pas copier deux fois le même littéral (dans sa forme positive ou négative). Ceci fait, nous comparons les littéraux de la liste **auxiliaire** avec ceux de **clauses**. La non présence d'un littéral de la liste **auxiliaire** dans **clauses** sous sa forme inverse implique que celui-ci est pur et nous le retournons donc.  
+      - Pour se faire, nous faisons appel à 3 fonctions auxiliaires et une fonction récursive au sein de `pur`. Elles sont :
+         -  `copy_wo_dl` (copie sans doublon) : interne à la fonction `pur` qui va parcourir **clauses** pour appeler la fonction `copy_wo_dl_bis` avec successivement chaque liste de la liste de listes **clauses**, puis appeler la fonction `list_of_clauses_wo_dl` avec la liste de listes **clauses** et la liste de littéraux **lit_wo_dl**.
 
 **à remplir**
 
