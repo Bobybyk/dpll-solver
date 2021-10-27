@@ -127,9 +127,9 @@ let rec solveur_dpll_rec clauses interpretation =
         if clauses = [] then Some interpretation
         else if mem clauses [] then None 
         else 
-                try let cl_uni = (unitaire clauses) in (solveur_dpll_rec (simplifie cl_uni clauses) interpretation)
+                try let cl_uni = (unitaire clauses) in (solveur_dpll_rec (simplifie cl_uni clauses) (cl_uni::interpretation) )
                 with Not_found -> try
-                        let lit_pur = (pur clauses) in (solveur_dpll_rec (simplifie lit_pur clauses) interpretation)
+                        let lit_pur = (pur clauses) in (solveur_dpll_rec (simplifie lit_pur clauses) (lit_pur::interpretation) )
                 with Not_found -> None;;
 
 (* tests *)
