@@ -121,22 +121,32 @@ let pur clauses =
 
 (* end of pur sequence *)
 
+let purHugo clauses = 
+        let rec purAux l =
+                match l with
+                | [] -> raise Not_found
+                | e::l' -> if List.mem (-e) (List.flatten clauses) then purAux l' else e
+        in purAux (List.flatten clauses);;
+
 let printlist l = List.iter (fun x -> printf "%d " x) l;;
 let print_list_of_lists l = List.iter (fun ll -> printlist ll) l;;
 
 (* solveur_dpll_rec : int list list -> int list -> int list option *)
 let rec solveur_dpll_rec clauses interpretation =
   if clauses = [] then Some interpretation
-  else if mem clauses [] then None 
-  else try
-    let cl_uni = (unitaire clauses) in (solveur_dpll_rec (simplifie cl_uni clauses) (cl_uni::interpretation) )
-      with Not_found -> 
-        try let lit_pur = (pur clauses) in (solveur_dpll_rec (simplifie lit_pur clauses) (lit_pur::interpretation) )
-          with Not_found -> let l = List.hd (List.hd clauses) in
-            let branche = solveur_dpll_rec (simplifie l clauses) (l::interpretation) in
-              match branche with
-                | None -> solveur_dpll_rec (simplifie (-l) clauses) ((-l)::interpretation)
-                | _ -> branche 
+  else if mem [] clauses then None 
+  else 
+          try
+                let cl_uni = (unitaire clauses) in (solveur_dpll_rec (simplifie cl_uni clauses) (cl_uni::interpretation) )
+          with Not_found -> 
+                try 
+                        let lit_pur = (pur clauses) in (solveur_dpll_rec (simplifie lit_pur clauses) (lit_pur::interpretation) )
+                with Not_found -> 
+                        let l = List.hd (List.hd clauses) in
+                        let branche = solveur_dpll_rec (simplifie l clauses) (l::interpretation) in
+                        match branche with
+                        | None -> solveur_dpll_rec (simplifie (-l) clauses) ((-l)::interpretation)
+                        | _ -> branche;;
 
 (* tests *)
 (* let () = print_modele (solveur_dpll_rec systeme []) *)
@@ -144,19 +154,7 @@ let rec solveur_dpll_rec clauses interpretation =
 
 let () =
   let clauses = Dimacs.parse Sys.argv.(1) in
-  print_modele (solveur_dpll_rec clauses [])
+  print_modele (solveur_dpll_rec clauses []);;
 
-(* print_list_of_lists (pur exemple_3_12);; *)
-
-
-
-
-(* our tests 
-print_list_of_lists exemple_3_12;;
-printf "\n";;
-print_list_of_lists (simplifie 3 exemple_3_12);;
-
-printf "\n";;
-printf "%d\n" (unitaire exemple_7_4);;
-
-printf "%d\n" (pur exemple_7_8);; *)
+print_int (purHugo exemple_7_8);;
+print_int (pur exemple_7_8);;
