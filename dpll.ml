@@ -86,7 +86,7 @@ let unitaire clauses =
       ce littéral ;
     - sinon, lève une exception `Failure "pas de littéral pur"' *)
 
-(* on regarde tous les littéraux de lit_wo_dl et on les compare à ceux de clauses 
+(* on regarde tous les littéraux de clauses_wo_dl et on les compare à ceux de clauses 
 pour s'assurer que l'inverse de chacun n'est pas présent. Si on ne trouve pas un littéral
 inverse de l'autre, on le retourne car il est pur, sinon on rappelle la fonction.
 Si on atteint la fin de la liste, retourne un failwith *)
@@ -96,41 +96,47 @@ let rec is_pur x clauses =
   | down_list::clauses' -> if(List.mem (-x) down_list) then false 
     else is_pur x clauses';; 
  
-let rec list_of_lit_wo_dl clauses lit_wo_dl = 
-  match lit_wo_dl with
+let rec list_of_clauses_wo_dl clauses clauses_wo_dl = 
+  match clauses_wo_dl with
     | [] -> raise (Not_found)
-    | e::lit_wo_dl' -> if (is_pur e clauses) = true then e 
-      else list_of_lit_wo_dl clauses lit_wo_dl';;
+    | e::clauses_wo_dl' -> if (is_pur e clauses) = true then e 
+      else list_of_clauses_wo_dl clauses clauses_wo_dl';;
 
-(* on cherche à copier tous les littéraux de "clauses" dans une liste "lit_wo_dl"
+(* on cherche à copier tous les littéraux de "clauses" dans une liste "clauses_wo_dl"
  en s'assurant avant chaque ajout que le littéral (+ ou -) considéré n'est pas déjà présent dans
- "lit_wo_dl" *)
-let rec copy_wo_dl_bis clause lit_wo_dl =
+ "clauses_wo_dl" *)
+let rec copy_wo_dl_bis clause clauses_wo_dl =
   match clause with
-    | [] -> lit_wo_dl
-    | e::clause' -> if (List.mem e lit_wo_dl) || (List.mem e lit_wo_dl) then copy_wo_dl_bis clause' lit_wo_dl else copy_wo_dl_bis clause' (e::lit_wo_dl);;
+    | [] -> clauses_wo_dl
+    | e::clause' -> if (List.mem e clauses_wo_dl) || (List.mem e clauses_wo_dl) then copy_wo_dl_bis clause' clauses_wo_dl else copy_wo_dl_bis clause' (e::clauses_wo_dl);;
 
 (* on parcourt les clauses et on appelle copy_wo_dl_bis avec chaque clause de clauses 
   et enfin, lorsque clausesIndex a été parcouru, on appekke list_of_clauses avec la
   copie des littéraux sans doublons et la liste des clauses *)
 let pur clauses =
-  let rec copy_wo_dl clauses clausesIndex lit_wo_dl =
+  let rec copy_wo_dl clauses clausesIndex clauses_wo_dl =
   match clausesIndex with
-    | [] -> list_of_lit_wo_dl clauses lit_wo_dl
-    | down_list::up_list' -> copy_wo_dl clauses up_list' (copy_wo_dl_bis down_list lit_wo_dl) in copy_wo_dl clauses clauses [];;
+    | [] -> list_of_clauses_wo_dl clauses clauses_wo_dl
+    | down_list::up_list' -> copy_wo_dl clauses up_list' (copy_wo_dl_bis down_list clauses_wo_dl) in copy_wo_dl clauses clauses [];;
 
 (* end of pur sequence *)
 
+let printlist l = List.iter (fun x -> printf "%d " x) l;;
+let print_list_of_lists l = List.iter (fun ll -> printlist ll) l;;
 
 (* solveur_dpll_rec : int list list -> int list -> int list option *)
 let rec solveur_dpll_rec clauses interpretation =
-        if clauses = [] then Some interpretation
-        else if mem clauses [] then None 
-        else 
-                try let cl_uni = (unitaire clauses) in (solveur_dpll_rec (simplifie cl_uni clauses) (cl_uni::interpretation) )
-                with Not_found -> try
-                        let lit_pur = (pur clauses) in (solveur_dpll_rec (simplifie lit_pur clauses) (lit_pur::interpretation) )
-                with Not_found -> None;;
+  if clauses = [] then Some interpretation
+  else if mem clauses [] then None 
+  else try
+    let cl_uni = (unitaire clauses) in (solveur_dpll_rec (simplifie cl_uni clauses) (cl_uni::interpretation) )
+      with Not_found -> 
+        try let lit_pur = (pur clauses) in (solveur_dpll_rec (simplifie lit_pur clauses) (lit_pur::interpretation) )
+          with Not_found -> let l = List.hd (List.hd clauses) in
+            let branche = solveur_dpll_rec (simplifie l clauses) (l::interpretation) in
+              match branche with
+                | None -> solveur_dpll_rec (simplifie (-l) clauses) ((-l)::interpretation)
+                | _ -> branche 
 
 (* tests *)
 (* let () = print_modele (solveur_dpll_rec systeme []) *)
@@ -140,11 +146,12 @@ let () =
   let clauses = Dimacs.parse Sys.argv.(1) in
   print_modele (solveur_dpll_rec clauses [])
 
+(* print_list_of_lists (pur exemple_3_12);; *)
+
+
+
+
 (* our tests 
-
-let printlist l = List.iter (fun x -> printf "%d " x) l;;
-let print_list_of_lists l = List.iter (fun ll -> printlist ll) l;;
-
 print_list_of_lists exemple_3_12;;
 printf "\n";;
 print_list_of_lists (simplifie 3 exemple_3_12);;
